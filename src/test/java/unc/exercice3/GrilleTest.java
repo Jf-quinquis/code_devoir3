@@ -6,8 +6,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class GrilleTest {
-  static char grille[][] = {
+public class GrilleTest {
+  public static char grille[][] = {
           {'@', '@', '@', '@', '9', '@', '@', '@', '@'},
           {'7', '@', '@', '1', '@', '@', '3', '@', '@'},
           {'@', '8', '4', '3', '@', '7', '@', '5', '1'},
@@ -18,7 +18,7 @@ class GrilleTest {
           {'@', '@', '1', '@', '@', '9', '@', '@', '6'},
           {'@', '@', '@', '@', '6', '@', '@', '@', '@'}
   };
-  static char grillePleine[][] = {
+  public static char grillePleine[][] = {
           {'1', '1', '1', '1', '9', '1', '1', '1', '1'},
           {'7', '1', '1', '1', '1', '1', '3', '1', '1'},
           {'1', '8', '4', '3', '1', '7', '1', '5', '1'},
@@ -31,24 +31,24 @@ class GrilleTest {
   };
 
   @Test
-  void testGetDimension(){
+  public void testGetDimension(){
     assertEquals(9,Grille.getDimension(grille));
   }
 
   @Test
-  void testSetValue() throws IOException {
+  public void testSetValue() throws IOException {
     assertEquals(true,Grille.setValue(0,4,'9',grille));
     Assertions.assertThrows(ArrayIndexOutOfBoundsException.class,() -> {Grille.setValue(12,15,'Z',grille);});
   }
 
   @Test
-  void testGetValue() throws IOException {
+  public void testGetValue() throws IOException {
     assertEquals(false,Grille.setValue(0,0,'3',grille));
     Assertions.assertThrows(ArrayIndexOutOfBoundsException.class,() -> {Grille.getValue(12,15,'Z',grille);});
   }
 
   @Test
-  void testHorsBornesException() throws IOException {
+  public void testHorsBornesException() throws IOException {
     assertEquals(false, Grille.horsBornesException(5, 4, grille));
     Assertions.assertThrows(IllegalArgumentException.class,() -> {Grille.horsBornesException(12, 4, grille);});
 
@@ -61,7 +61,7 @@ class GrilleTest {
   }
 
   @Test
-  void testValeurImpossibleException() throws IOException {
+  public void testValeurImpossibleException() throws IOException {
     // test avec un 9 en position 1,1 casse libre acceptant la valeur
     assertEquals(true,Grille.valeurImpossibleException(0,0,'5',grille));
     // test avec un 9 en position 0,1 casse libre mais la ligne contient déjà un 9 renvoie une erreur
@@ -75,13 +75,13 @@ class GrilleTest {
   }
 
   @Test
-  void testComplete() {
+  public void testComplete() {
     assertEquals(false, Grille.complete('@', grille ));
     assertEquals(true, Grille.complete( '@', grillePleine ));
   }
 
   @Test
-  void testCaracterePossible(){
+  public void testCaracterePossible(){
     char test[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     assertArrayEquals(test, Grille.caracterePossible(9));
   }

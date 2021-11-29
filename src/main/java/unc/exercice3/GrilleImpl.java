@@ -5,7 +5,7 @@ import java.io.IOException;
 /** Class pour remplir une grille de Sudoku. */
 public class GrilleImpl {
   /** Affichage de la grille résolue. */
-  public static void main(String[] args) throws IOException {
+  static void main(String[] args) throws IOException {
     /* récupération de la grille du fichier.
     * Choisir la dimension 9, 16 ou 25.
     */
@@ -29,7 +29,7 @@ public class GrilleImpl {
   }
 
   /** Méthode pour afficher la grille. */
-  private static void afficherGrille(char[][] grille) {
+  public static void afficherGrille(char[][] grille) {
     for (int ligne = 0; ligne < grille.length; ligne++) {
       for (int colonne = 0; colonne < grille.length; colonne++) {
         System.out.print(grille[ligne][colonne] + "|");
@@ -39,7 +39,7 @@ public class GrilleImpl {
   }
 
   /** Méthode pour résoudre la grille. */
-  private static boolean implementerGrille(char[][] grille) throws IOException {
+  public static boolean implementerGrille(char[][] grille) throws IOException {
     for (int ligne = 0; ligne < grille.length; ligne++) {
       for (int colonne = 0; colonne < grille.length; colonne++) {
         if (grille[ligne][colonne] == '@') {
