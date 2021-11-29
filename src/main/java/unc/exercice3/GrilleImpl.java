@@ -6,16 +6,25 @@ import java.io.IOException;
 public class GrilleImpl {
   /** Affichage de la grille résolue. */
   public static void main(String[] args) throws IOException {
+    /* récupération de la grille du fichier.
+    * Choisir la dimension 9, 16 ou 25.
+    */
+    int dimension = 9;
+    char [][] grilleParse = GrilleParser.parse(dimension, "data/sudoku-" + dimension
+            +  "x" + dimension +  ".txt");
 
-    char[][] grille = Template.grille9;
-    implementerGrille(grille);
-    if (Grille.complete('@', grille)) {
+    /* Remplir la grille. */
+    implementerGrille(grilleParse);
+    /* Afficher la Grille. */
+    afficherGrille(grilleParse);
+
+    if (Grille.complete('@', grilleParse)) {
       System.out.println("Grille résolue ! :)");
     } else {
       System.out.println("Grille no résolue ! :(");
     }
 
-    afficherGrille(grille);
+
 
   }
 

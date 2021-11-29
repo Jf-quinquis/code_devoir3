@@ -5,9 +5,9 @@ import java.io.IOException;
 /**
  * Code pour un Sudoku.
  */
-public class Grille {
-  static char caractereVide = '@';
-  static char[][] grille = {
+public interface Grille {
+  char caractereVide = '@';
+  char[][] grille = {
           {'7', '@', '2', '@', '5', '@', '6', '@', '@'},
           {'@', '@', '@', '@', '@', '3', '@', '@', '@'},
           {'1', '@', '@', '@', '@', '9', '5', '@', '@'},
@@ -31,19 +31,15 @@ public class Grille {
 
   /**
    * Affecte une valeur dans la grille.
-
+   *
    * @param ligne     position x dans la grille
    * @param colonne   position y dans la grille
+   * @param caractere a mettre dans la case
    */
-  static char setValue(final int ligne, final int colonne, char value) throws IOException {
-    if (!valeurImpossibleException(ligne, colonne, caractereVide, grille)
-        && !horsBornesException(ligne, colonne, grille)
-        && !caractereInterditException(caractereVide, grille)) {
-      grille[ligne][colonne] = value;
-    } else {
-      throw new IllegalArgumentException("Ne peut insérer la valeur dans la case.");
-    }
-    return value;
+  static boolean setValue(final int ligne, final int colonne, final char caractere, final char[][] grille) throws IOException {
+    return !valeurImpossibleException(ligne, colonne, caractere, grille)
+            && !horsBornesException(ligne, colonne, grille)
+            && !caractereInterditException(caractere, grille);
   }
 
   /**
@@ -52,11 +48,15 @@ public class Grille {
    * @param ligne position x dans la grille
    * @return valeur dans la case ligne, colonne
    */
-  static char getValue(final int ligne, final int colonne, final char[][] grille) throws IOException {
-    char value = caractereVide;
+  static char getValue(final int ligne, final int colonne, char value, final char[][] grille) throws IOException {
     // Retour de la valeur de la case
-    if (!horsBornesException(ligne, colonne, grille)) {
+    if (!testValeurLigne(ligne, value, grille)
+            && !testValeurColonne(colonne, value, grille)
+            && !testValeurZone(ligne, colonne, value, grille)
+            && !caractereInterditException(value, grille)) {
       value = grille[ligne][colonne];
+    } else {
+      throw new IllegalArgumentException("Impossible de retourner la valeur dans une case.");
     }
     return value;
   }
@@ -146,11 +146,14 @@ public class Grille {
    * @return la valeur de la borne si elle est correcte
    */
   static boolean horsBornesException(final int ligne, final int colonne, final char[][] grille) throws IOException {
+    Boolean test = false;
     if (ligne > grille.length || colonne > grille.length) {
+      test = true;
       throw new IllegalArgumentException("La ligne et/ou la colonne sont hors borne");
     } else {
-      return false;
+      test = false;
     }
+    return test;
   }
 
   /**
@@ -160,17 +163,18 @@ public class Grille {
    * @return le caractère s'il est correcte
    */
   static boolean caractereInterditException(final char value, char[][] grille) throws IOException {
-    boolean test = false;
+    boolean test = true;
     for (final char valeur : caracterePossible(getDimension(grille))) {
       if (valeur == value) {
         test = false;
         break;
       }
     }
+
     if (test) {
       throw new IllegalArgumentException("Ce caractère est interdit");
     }
-    return false;
+    return test;
   }
 
   /**
@@ -185,8 +189,7 @@ public class Grille {
    */
   static char[] caracterePossible(final int taille) {
     final char[] possible = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-      'k', 'l', 'm', 'n', 'o'};
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'};
 
     char[] list = new char[taille];
     for (int i = 0; i < taille; i++) {
